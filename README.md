@@ -1,11 +1,11 @@
 # react-scroll-restoration
 
-With `React Router v5`, the smooth scroll restoration in SPA
+With `React Router v4 & v5`, the smooth scroll restoration in SPA
 
 
 ## Why need Scroll Restoration?
 
-I experiencing some problems with scroll positions on the back button (history popstate) when using react-router. 
+I experiencing some problems with scroll positions on the back button (History Popstate) when using react-router. 
 
 In a single page application (SPA), the application manipulates the browser history and DOM to simulate navigation. Because navigation is simulated and rendering is dynamic, the usual browser behavior of restoring scroll position when navigating back and forth through the history is not generally functional
 
