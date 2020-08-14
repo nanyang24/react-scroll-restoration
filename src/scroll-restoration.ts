@@ -1,32 +1,31 @@
-import { useEffect, memo } from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useEffect, memo } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { scrollTo, getScrollPage } from './utils';
 
-import { scrollTo, getScrollPage } from "./utils";
-
-export const DefaultKey = "init-enter";
+export const DefaultKey = 'init-enter';
 
 interface IProps {
   visitedUrl: Map<string, number>;
 }
 
 function ScrollRestoration({
-  location,
+  history,
   visitedUrl,
 }: RouteComponentProps & IProps) {
   const handlePopStateChange = () => {
-    const { state } = (location as unknown) as History;
-    const key = state && state.key ? state.key : DefaultKey;
-    const existingRecord = visitedUrl.get(key);
+    const { location } = history;
+    const { key } = location;
+    const existingRecord = visitedUrl.get(key || DefaultKey);
 
-    if (existingRecord) {
+    if (existingRecord !== undefined) {
       scrollTo(existingRecord);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("popstate", handlePopStateChange);
+    window.addEventListener('popstate', handlePopStateChange);
     return () => {
-      window.removeEventListener("popstate", handlePopStateChange);
+      window.removeEventListener('popstate', handlePopStateChange);
     };
   }, []);
 
@@ -35,7 +34,7 @@ function ScrollRestoration({
 
 export default withRouter(
   memo(ScrollRestoration, (prevProps, nextProps) => {
-    const { location: prevLoaction, visitedUrl } = prevProps;
+    const { location: prevLoaction, visitedUrl, history } = prevProps;
     const { location: nextLoaction } = nextProps;
 
     const key = prevLoaction.key || DefaultKey;
@@ -43,13 +42,17 @@ export default withRouter(
     const locationChanged =
       (nextLoaction.pathname !== prevLoaction.pathname ||
         nextLoaction.search !== prevLoaction.search) &&
-      nextLoaction.hash === "";
+      nextLoaction.hash === '';
 
     const scroll = getScrollPage();
 
     if (locationChanged) {
-      scrollTo(0);
-      visitedUrl.set(key, scroll);
+      if (history.action !== 'POP') {
+        scrollTo(0);
+        visitedUrl.set(key, scroll);
+      } else {
+        visitedUrl.set(key, scroll);
+      }
     }
 
     return false;
