@@ -22,6 +22,7 @@ export default {
   output: {
     dir: "dist",
     format: "cjs",
+    exports: 'auto',
   },
   external: ["react", "react-router-dom"],
 };
