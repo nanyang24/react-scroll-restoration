@@ -1,6 +1,6 @@
 {
   "name": "react-scroll-restoration",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Support for scroll restoration with React router",
   "main": "dist/index.js",
   "scripts": {
